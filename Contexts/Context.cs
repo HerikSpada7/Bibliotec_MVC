@@ -30,7 +30,7 @@ namespace Bibliotec.Contexts
             // Ryan Kure:
             {
                 optionsBuilder.UseSqlServer(@"Data Source=NOTE14-S28\\SQLEXPRESS; 
-                    Initial Catalog = Bibliotec_MVC; 
+                    Initial Catalog = Bibliotec_MVC;
                     User Id=sa;
                     Password=123; 
                     Integrated Security=true; 
