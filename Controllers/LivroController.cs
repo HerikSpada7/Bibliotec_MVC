@@ -1,4 +1,3 @@
-using System.Net.Mime;
 using Bibliotec.Contexts;
 using Bibliotec.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -61,8 +60,35 @@ namespace Bibliotec_MVC.Controllers
             novoLivro.Editora = form ["Editora"].ToString();
             novoLivro.Idioma = form ["Idioma"].ToString();
 
+            // Trabalhar com imagens:
+            if(form.Files.Count > 0){
+                //Promeiro passo:
+                    //Amazenaremos o arquivo enviado pelo usuário
+                    var arquivo = form.Files[0];
 
-            // img
+                //Segundo passo:
+                    var pasta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/Livros" );
+                    //Validarmos se a pasta que será armazenada as imagens, existe. Caso não exista, criaremos uma nova pasta
+                    if(Directory.Exists(pasta)){
+                        //Criar a pasta:
+                        Directory.CreateDirectory(pasta);
+                    }
+
+                // Terceiro passo: 
+                    // Criar a varíavel para armazenar o caminho em que meu arquivo estara, além do nome dele
+                    var caminho = Path.Combine(pasta, arquivo.FileName);
+                    
+                    using (var stream = new FileStream(caminho, FileMode.Create)){
+                        arquivo.CopyTo(stream);
+                    }
+
+                    novoLivro.Imagem = arquivo.FileName;
+
+                }else{
+                    novoLivro.Imagem= "padrao.png";
+                }
+
+                // img
 
             context.Livro.Add(novoLivro);
             context.SaveChanges();
@@ -70,12 +96,24 @@ namespace Bibliotec_MVC.Controllers
             // SEGUNDA PARTE: Adicionar dentro da LivroCategoria a categoria que pertence ao novoLivro
 
             // Lista a tabela LivroCategoria:
-            List<LivroCategoria> livroCategorias = new List<LivroCategoria>();
+            List<LivroCategoria> ListaLivroCategorias = new List<LivroCategoria>();
             
 
             // Array que possui as categorias selecionas pelo usuário
             string[] categoriasSelecionadas = form ["Categoria"].ToString().Split(',');
+
+            foreach(string categoria in categoriasSelecionadas){
+                LivroCategoria livroCategoria = new LivroCategoria();
+                livroCategoria.CategoriaID = int.Parse(categoria);
+                livroCategoria.LivroID = novoLivro.LivroID;
+                ListaLivroCategorias.Add(livroCategoria);
+            }
             
+                context.LivroCategoria.AddRange(ListaLivroCategorias);
+                context.SaveChanges();
+
+                return LocalRedirect("/Livro/Cadastro");
+            }
             
 
 
@@ -87,4 +125,3 @@ namespace Bibliotec_MVC.Controllers
         //     return View("Error!");
         // }
     }
-}
