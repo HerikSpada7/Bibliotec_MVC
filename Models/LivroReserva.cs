@@ -20,10 +20,10 @@ namespace Bibliotec.Models
 
         [ForeignKey("Usuario")]
         public int UsuarioID { get; set; }
-        public Usuario Usuario {get;set;}
+        public Usuario ? Usuario {get;set;}
 
         [ForeignKey("Livro")]
         public int LivroID { get; set; }
-        public Livro Livro {get;set;}
+        public Livro ? Livro {get;set;}
     }
 }

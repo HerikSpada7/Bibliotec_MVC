@@ -24,7 +24,7 @@
             </thead>
 
             <tbody>
-                @foreach(var livro in ViewBag.Livros){;
+                @foreach(var livro in ViewBag.Livros){
                 <tr>
                     <td data-cell="titulo">Nome</td>
                     <td data-cell="reservado">@(ViewBag.LivrosComReserva.ContainsKey(livro.LivroID) ? "Sim" : "Não")</td>
@@ -36,7 +36,7 @@
                     <td class="icon" data-cell="excluir"><a class="navbar-item"><img style="width: 40px;"
                                 src="~/images/excluir.svg" alt=""></a></td>
                 </tr>
-                }
+                };
             </tbody>
         </table>
 
